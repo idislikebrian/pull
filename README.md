@@ -35,7 +35,7 @@ Collective demand event platform. Fans signal “I would go to this” before an
    cp .env.example .env
    ```
 
-3. Point `NEON_URL` at a local PostgreSQL or Neon database.
+3. Point `DATABASE_URL` at a local PostgreSQL or Neon database.
 
 4. Run the database migration and seed:
 
