@@ -1,0 +1,81 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("NEON_URL")
+}
+
+enum CampaignStatus {
+  DRAFT
+  LIVE
+  FUNDED
+  GREENLIT
+  EXPIRED
+  CANCELLED
+}
+
+enum PledgeType {
+  SOFT
+  HARD
+}
+
+enum PaymentStatus {
+  NOT_REQUIRED
+  AUTHORIZED
+  CAPTURED
+  REFUNDED
+  FAILED
+  CANCELLED
+}
+
+model User {
+  id        String     @id @default(cuid())
+  username  String     @unique
+  email     String     @unique
+  avatarUrl String?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  campaigns Campaign[]
+  pledges   Pledge[]
+}
+
+model Campaign {
+  id          String         @id @default(cuid())
+  slug        String         @unique
+  title       String
+  artistName  String
+  venueName   String
+  city        String
+  dateWindow  String
+  description String
+  fundingGoal Int
+  deadline    DateTime
+  status      CampaignStatus @default(DRAFT)
+  imageUrl    String?
+  creatorId   String
+  creator     User           @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  pledges     Pledge[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@index([status, deadline])
+  @@index([city])
+}
+
+model Pledge {
+  id              String        @id @default(cuid())
+  userId          String
+  campaignId      String
+  amount          Int
+  type            PledgeType
+  paymentStatus   PaymentStatus @default(NOT_REQUIRED)
+  stripeIntentId  String?
+  createdAt       DateTime      @default(now())
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  campaign        Campaign      @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@index([campaignId, type])
+  @@index([userId])
+}
