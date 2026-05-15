@@ -9,7 +9,7 @@ const spaceGrotesk = Space_Grotesk({subsets:['latin'],variable:'--font-sans'});
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
   title: "Pull",
-  description: "Collective demand events before they exist."
+  description: "People proving demand for events before they exist."
 };
 
 export default function RootLayout({
@@ -25,7 +25,7 @@ export default function RootLayout({
             PULL
           </Link>
           <nav aria-label="Primary navigation">
-            <Link href="/campaigns/new">Create proposal</Link>
+            <Link href="/campaigns/new">Propose a night</Link>
           </nav>
         </header>
         {children}

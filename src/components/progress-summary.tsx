@@ -6,9 +6,9 @@ export function ProgressSummary({ campaign }: { campaign: CampaignWithPledges })
   const filledSegments = Math.min(Math.ceil((stats.percentComplete / 100) * segmentCount), segmentCount);
 
   return (
-    <section className="progress-module" aria-label="Campaign progress">
+    <section className="progress-module" aria-label="Demand signal progress">
       <div className="progress-readout">
-        <span className="instrument-label">Threshold</span>
+        <span className="instrument-label">Momentum toward threshold</span>
         <strong>{stats.percentComplete}%</strong>
       </div>
       <div className="progress-segments" aria-hidden="true">
@@ -19,15 +19,15 @@ export function ProgressSummary({ campaign }: { campaign: CampaignWithPledges })
       <div className="metrics">
         <div className="metric-card">
           <strong>{currency(stats.totalPledged)}</strong>
-          <span className="instrument-label">Pledged</span>
+          <span className="instrument-label">Hard signal</span>
         </div>
         <div className="metric-card">
           <strong>{stats.hardPledgeCount}</strong>
-          <span className="instrument-label">Hard signals</span>
+          <span className="instrument-label">Committed</span>
         </div>
         <div className="metric-card">
           <strong>{stats.supporters}</strong>
-          <span className="instrument-label">Supporters</span>
+          <span className="instrument-label">People in</span>
         </div>
         <div className="metric-card">
           <strong>{stats.daysRemaining}</strong>

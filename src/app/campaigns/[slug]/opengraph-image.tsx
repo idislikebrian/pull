@@ -39,7 +39,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
           <div style={{ color: "#087f8c", fontSize: 34, fontWeight: 800, marginBottom: 26 }}>{campaign.city}</div>
           <div style={{ fontSize: 92, fontWeight: 950, lineHeight: 0.95 }}>{campaign.title}</div>
         </div>
-        <div style={{ color: "#6d655d", fontSize: 32 }}>{campaign.dateWindow}</div>
+        <div style={{ color: "#6d655d", fontSize: 32 }}>Demand signal open / {campaign.dateWindow}</div>
       </div>
     ),
     size

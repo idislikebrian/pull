@@ -1,6 +1,18 @@
 import Link from "next/link";
 import { campaignStats, currency, type CampaignWithPledges } from "@/lib/campaigns";
 
+function statusLabel(status: CampaignWithPledges["status"]) {
+  if (status === "FUNDED") {
+    return "Threshold met";
+  }
+
+  if (status === "GREENLIT") {
+    return "Greenlit";
+  }
+
+  return "Signal open";
+}
+
 export function CampaignCard({ campaign }: { campaign: CampaignWithPledges }) {
   const stats = campaignStats(campaign);
   const segmentCount = 18;
@@ -10,14 +22,14 @@ export function CampaignCard({ campaign }: { campaign: CampaignWithPledges }) {
     <article className="campaign-card">
       <div className="campaign-card-body">
         <div className="card-topline">
-          <span className="status-pill">{campaign.status}</span>
-          <span className="instrument-label">Notice {stats.percentComplete}%</span>
+          <span className="status-pill">{statusLabel(campaign.status)}</span>
+          <span className="instrument-label">{stats.percentComplete}% to threshold</span>
         </div>
-        <p className="classified-kicker">Public demand</p>
+        <p className="classified-kicker">Demand signal</p>
         <h3>{campaign.title}</h3>
         <dl className="classified-ledger">
           <div>
-            <dt>Market</dt>
+            <dt>City</dt>
             <dd>{campaign.city}</dd>
           </div>
           <div>
@@ -31,11 +43,11 @@ export function CampaignCard({ campaign }: { campaign: CampaignWithPledges }) {
           ))}
         </div>
         <p className="classified-total">
-          {currency(stats.totalPledged)} / {currency(campaign.fundingGoal)} / {stats.supporters} supporters
+          {currency(stats.totalPledged)} signaled / {currency(campaign.fundingGoal)} threshold / {stats.supporters} in
         </p>
         <div className="hero-actions">
           <Link className="button secondary" href={`/campaigns/${campaign.slug}`}>
-            View campaign
+            Read signal
           </Link>
         </div>
       </div>

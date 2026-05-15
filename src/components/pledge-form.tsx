@@ -30,19 +30,21 @@ export function PledgeForm({ campaignId }: { campaignId: string }) {
         return;
       }
 
-      setMessage(choice === "SOFT" ? "Soft pledge logged." : "Hard pledge reserved for Stripe authorization.");
+      setMessage(choice === "SOFT" ? "Signal received. You are counted in." : "Commitment received. Momentum updated.");
     });
   }
 
   return (
     <div className="pledge-panel">
-      <p className="instrument-label">Pledge console</p>
-      <h2>Signal demand</h2>
-      <p className="meta">Soft pledges show social intent. Hard pledges are the higher-quality booking signal.</p>
+      <p className="instrument-label">Demand console</p>
+      <h2>Help make this real</h2>
+      <p className="meta">
+        A soft signal says you would go. A paid signal gives organizers the proof they need to move.
+      </p>
       <div className="pledge-control">
         <label className="pledge-option">
           <input checked={choice === "SOFT"} name="pledge" onChange={() => setChoice("SOFT")} type="radio" />
-          <span>Attend</span>
+          <span>I'm in</span>
         </label>
         <label className="pledge-option">
           <input checked={choice === "1000"} name="pledge" onChange={() => setChoice("1000")} type="radio" />
@@ -58,8 +60,9 @@ export function PledgeForm({ campaignId }: { campaignId: string }) {
         </label>
       </div>
       <button className="button" disabled={isPending} onClick={submitPledge} type="button">
-        {isPending ? "[PLEDGING]" : "Pledge support"}
+        {isPending ? "Sending signal" : "Signal demand"}
       </button>
+      <p className="trust-note">No ticket exists yet. This is demand becoming legible.</p>
       {message ? <p className="pledge-message">[{message}]</p> : null}
     </div>
   );

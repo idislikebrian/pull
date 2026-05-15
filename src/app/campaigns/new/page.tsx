@@ -15,7 +15,7 @@ async function createCampaign(formData: FormData) {
   const deadlineValue = String(formData.get("deadline") ?? "");
 
   if (!title || !artistName || !venueName || !city || !dateWindow || !description || !deadlineValue || !fundingGoal) {
-    throw new Error("Missing required campaign fields.");
+    throw new Error("Missing required signal fields.");
   }
 
   const creator = await prisma.user.upsert({
@@ -52,19 +52,23 @@ async function createCampaign(formData: FormData) {
 export default function NewCampaignPage() {
   return (
     <main className="page-shell">
-      <p className="eyebrow">Organizer proposal</p>
-      <h1>Test the pull before taking the risk.</h1>
+      <p className="eyebrow">Open a demand signal</p>
+      <h1>Give the scene something to gather around.</h1>
+      <p className="lede">
+        Name a possible night, set the proof threshold, and let demand show itself before booking gets expensive.
+      </p>
       <form action={createCampaign} className="form-panel form-grid">
         <label className="field">
-          <span>Event title</span>
+          <span>Signal title</span>
           <input name="title" placeholder="DJ Seinfeld @ Elsewhere Rooftop" required />
+          <small>Write it like something people can recognize and repeat.</small>
         </label>
         <label className="field">
           <span>Artist / DJ</span>
           <input name="artistName" placeholder="DJ Seinfeld" required />
         </label>
         <label className="field">
-          <span>Venue target</span>
+          <span>Possible room</span>
           <input name="venueName" placeholder="Elsewhere Rooftop" required />
         </label>
         <label className="field">
@@ -76,23 +80,24 @@ export default function NewCampaignPage() {
           <input name="dateWindow" placeholder="Late August 2026" required />
         </label>
         <label className="field">
-          <span>Funding threshold in USD</span>
+          <span>Proof threshold in USD</span>
           <input min="1" name="fundingGoal" placeholder="12000" required type="number" />
+          <small>The hard-signal total that makes the booking feel viable.</small>
         </label>
         <label className="field">
           <span>Deadline</span>
           <input name="deadline" required type="date" />
         </label>
         <label className="field">
-          <span>Description</span>
+          <span>Why it should exist</span>
           <textarea
             name="description"
-            placeholder="What would make this event special, and why should people signal demand now?"
+            placeholder="What is the cultural argument for this night, and why would this city show up?"
             required
           />
         </label>
         <button className="button" type="submit">
-          Launch proposal
+          Open signal
         </button>
       </form>
     </main>
