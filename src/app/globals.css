@@ -1,5 +1,5 @@
-@import "tailwindcss";
 @import url("https://fonts.googleapis.com/css2?family=Doto:wght@500;700&family=Space+Grotesk:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap");
+@import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
@@ -154,6 +154,7 @@ select {
 .page-shell {
   margin: 0 auto;
   max-width: 1240px;
+  padding: 0 clamp(var(--space-md), 5vw, var(--space-3xl)) var(--space-4xl);
 }
 
 .hero {
@@ -162,6 +163,10 @@ select {
   gap: var(--space-2xl);
   grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.58fr);
   margin-top: 80px;
+}
+
+.hero > * {
+  min-width: 0;
 }
 
 .eyebrow,
@@ -255,16 +260,20 @@ h3 {
 }
 
 .campaign-card {
+  display: flex;
+  min-height: 100%;
   overflow: hidden;
+  position: relative;
 }
 
-.campaign-card img,
-.campaign-hero-image {
-  display: block;
-  filter: grayscale(1) contrast(1.12);
-  height: 270px;
-  object-fit: cover;
-  width: 100%;
+.campaign-card::before {
+  background: var(--accent);
+  content: "";
+  height: 2px;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 
 .campaign-card-body,
@@ -275,8 +284,37 @@ h3 {
   padding: var(--space-lg);
 }
 
+.campaign-card-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.hero-panel {
+  border-top-color: var(--accent);
+}
+
+.hero-panel .meta {
+  margin-bottom: 0;
+}
+
+.hero-panel h2 {
+  font-size: clamp(2rem, 4vw, 3.8rem);
+  margin-top: var(--space-xl);
+}
+
 .campaign-card h3 {
-  margin-bottom: var(--space-sm);
+  font-family: "Space Grotesk", "DM Sans", system-ui, sans-serif;
+  font-size: clamp(1.65rem, 3vw, 2.35rem);
+  font-weight: 700;
+  line-height: 0.98;
+  margin-bottom: var(--space-md);
+  text-transform: uppercase;
+}
+
+.campaign-card .hero-actions {
+  margin-top: auto;
+  padding-top: var(--space-lg);
 }
 
 .card-topline {
@@ -284,6 +322,68 @@ h3 {
   display: flex;
   justify-content: space-between;
   margin-bottom: var(--space-lg);
+}
+
+.classified-kicker,
+.classified-total {
+  color: var(--text-display);
+  font-family: "Space Mono", monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.35;
+  margin-bottom: var(--space-sm);
+  text-transform: uppercase;
+}
+
+.classified-kicker {
+  border-bottom: 1px solid var(--border);
+  border-top: 1px solid var(--border);
+  color: var(--accent);
+  padding: var(--space-sm) 0;
+}
+
+.classified-ledger {
+  border-bottom: 1px solid var(--border);
+  border-top: 1px solid var(--border);
+  display: grid;
+  gap: 0;
+  margin: var(--space-lg) 0;
+}
+
+.classified-ledger div {
+  align-items: baseline;
+  display: grid;
+  gap: var(--space-md);
+  grid-template-columns: 82px minmax(0, 1fr);
+  padding: var(--space-sm) 0;
+}
+
+.classified-ledger div + div {
+  border-top: 1px solid var(--border);
+}
+
+.classified-ledger dt,
+.classified-ledger dd {
+  font-family: "Space Mono", monospace;
+  font-size: 0.72rem;
+  line-height: 1.35;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.classified-ledger dt {
+  color: var(--text-disabled);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.classified-ledger dd {
+  color: var(--text-primary);
+}
+
+.classified-total {
+  margin: 0;
 }
 
 .status-pill {
@@ -379,28 +479,32 @@ h3 {
   display: grid;
   gap: var(--space-xl);
   grid-template-columns: minmax(0, 1fr) minmax(320px, 420px);
+  padding-top: 80px;
 }
 
 .campaign-detail h1 {
   font-family: "Space Grotesk", system-ui, sans-serif;
-  font-size: clamp(3.2rem, 6.5vw, 6.4rem);
-  font-weight: 500;
-  line-height: 0.92;
+  font-size: clamp(3rem, 6vw, 6rem);
+  font-weight: 700;
+  line-height: 0.88;
   margin-top: var(--space-md);
+  text-transform: uppercase;
 }
 
-.detail-media {
+.detail-notice {
+  background: rgba(17, 17, 17, 0.94);
   border: 1px solid var(--border-visible);
+  border-top: 2px solid var(--accent);
   margin-bottom: var(--space-lg);
-  overflow: hidden;
-  position: relative;
+  padding: var(--space-lg);
 }
 
-.detail-media .status-pill {
-  background: var(--black);
-  left: var(--space-md);
-  position: absolute;
-  top: var(--space-md);
+.detail-notice .card-topline {
+  margin-bottom: var(--space-lg);
+}
+
+.detail-notice .classified-ledger {
+  margin-bottom: 0;
 }
 
 .signal-panel {
@@ -530,11 +634,16 @@ h3 {
 
   .hero {
     align-items: start;
+    margin-top: var(--space-lg);
     min-height: auto;
   }
 
   h1 {
-    font-size: clamp(3.6rem, 17vw, 6.5rem);
+    font-size: clamp(3.2rem, 15vw, 6.5rem);
+  }
+
+  .hero-actions .button {
+    flex: 1 1 100%;
   }
 
   .metrics {

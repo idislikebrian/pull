@@ -46,9 +46,25 @@ export default async function CampaignPage({ params }: CampaignPageProps) {
   return (
     <main className="page-shell campaign-detail">
       <article>
-        <div className="detail-media">
-          {campaign.imageUrl ? <img className="campaign-hero-image" src={campaign.imageUrl} alt="" /> : null}
-          <span className="status-pill">{campaign.status}</span>
+        <div className="detail-notice">
+          <div className="card-topline">
+            <span className="status-pill">{campaign.status}</span>
+            <span className="instrument-label">Public demand</span>
+          </div>
+          <dl className="classified-ledger">
+            <div>
+              <dt>Market</dt>
+              <dd>{campaign.city}</dd>
+            </div>
+            <div>
+              <dt>Window</dt>
+              <dd>{campaign.dateWindow}</dd>
+            </div>
+            <div>
+              <dt>Threshold</dt>
+              <dd>{currency(campaign.fundingGoal)}</dd>
+            </div>
+          </dl>
         </div>
         <p className="eyebrow">{campaign.city}</p>
         <h1>{campaign.title}</h1>

@@ -8,22 +8,29 @@ export function CampaignCard({ campaign }: { campaign: CampaignWithPledges }) {
 
   return (
     <article className="campaign-card">
-      {campaign.imageUrl ? <img src={campaign.imageUrl} alt="" /> : null}
       <div className="campaign-card-body">
         <div className="card-topline">
           <span className="status-pill">{campaign.status}</span>
-          <span className="instrument-label">{stats.percentComplete}%</span>
+          <span className="instrument-label">Notice {stats.percentComplete}%</span>
         </div>
+        <p className="classified-kicker">Public demand</p>
         <h3>{campaign.title}</h3>
-        <p className="meta">
-          {campaign.city} / {campaign.dateWindow}
-        </p>
+        <dl className="classified-ledger">
+          <div>
+            <dt>Market</dt>
+            <dd>{campaign.city}</dd>
+          </div>
+          <div>
+            <dt>Window</dt>
+            <dd>{campaign.dateWindow}</dd>
+          </div>
+        </dl>
         <div className="progress-segments compact" aria-hidden="true">
           {Array.from({ length: segmentCount }, (_, index) => (
             <span className={index < filledSegments ? "is-filled" : ""} key={index} />
           ))}
         </div>
-        <p className="meta">
+        <p className="classified-total">
           {currency(stats.totalPledged)} / {currency(campaign.fundingGoal)} / {stats.supporters} supporters
         </p>
         <div className="hero-actions">

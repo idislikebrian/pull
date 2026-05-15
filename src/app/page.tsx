@@ -27,8 +27,8 @@ export default async function Home() {
           <p className="eyebrow">Collective demand events</p>
           <h1>Pull culture into existence.</h1>
           <p className="lede">
-            Pull lets fans publicly signal demand and refundable intent before a show is booked, giving organizers a
-            clearer read on which rooms, cities, and lineups are actually viable.
+            Fans turn intent into a visible signal before a show is booked, giving organizers a sharper read on which
+            rooms, cities, and lineups are ready to move.
           </p>
           <div className="hero-actions">
             <Link className="button" href="/campaigns/new">
@@ -42,11 +42,11 @@ export default async function Home() {
           </div>
         </div>
         <div className="hero-panel">
-          <span className="status-pill">MVP focus</span>
-          <h2>Demand first. Logistics later.</h2>
+          <span className="status-pill">Live signal</span>
+          <h2>Demand first. The room follows.</h2>
           <p className="meta">
-            The initial product only needs to prove public intent, pre-confirmation money commitment, and organizer
-            usefulness. Booking, payouts, routing, and analytics can wait.
+            Public pledges make momentum legible before commitments get expensive, so fans and organizers can find the
+            nights worth building around.
           </p>
         </div>
       </section>

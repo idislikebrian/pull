@@ -13,7 +13,6 @@ async function createCampaign(formData: FormData) {
   const description = String(formData.get("description") ?? "").trim();
   const fundingGoal = Math.round(Number(formData.get("fundingGoal") ?? 0) * 100);
   const deadlineValue = String(formData.get("deadline") ?? "");
-  const imageUrl = String(formData.get("imageUrl") ?? "").trim();
 
   if (!title || !artistName || !venueName || !city || !dateWindow || !description || !deadlineValue || !fundingGoal) {
     throw new Error("Missing required campaign fields.");
@@ -43,7 +42,6 @@ async function createCampaign(formData: FormData) {
       fundingGoal,
       deadline: new Date(`${deadlineValue}T23:59:59.000Z`),
       status: "LIVE",
-      imageUrl: imageUrl || null,
       creatorId: creator.id
     }
   });
@@ -84,10 +82,6 @@ export default function NewCampaignPage() {
         <label className="field">
           <span>Deadline</span>
           <input name="deadline" required type="date" />
-        </label>
-        <label className="field">
-          <span>Cover image URL</span>
-          <input name="imageUrl" placeholder="https://..." type="url" />
         </label>
         <label className="field">
           <span>Description</span>
