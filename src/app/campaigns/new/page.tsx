@@ -82,7 +82,7 @@ async function createCampaign(formData: FormData) {
 
 export default function NewCampaignPage() {
   return (
-    <main className="page-shell">
+    <main className="page-shell proposal-page">
       <p className="eyebrow">Open a demand signal</p>
       <h1>Give the scene something to gather around.</h1>
       <p className="lede">
