@@ -1,6 +1,12 @@
 import { redirect } from "next/navigation";
+import { VenueAutocomplete } from "@/components/venue-autocomplete";
 import { slugify } from "@/lib/campaigns";
 import { prisma } from "@/lib/prisma";
+
+function optionalFormString(formData: FormData, key: string) {
+  const value = String(formData.get(key) ?? "").trim();
+  return value || null;
+}
 
 async function createCampaign(formData: FormData) {
   "use server";
@@ -8,13 +14,32 @@ async function createCampaign(formData: FormData) {
   const title = String(formData.get("title") ?? "").trim();
   const artistName = String(formData.get("artistName") ?? "").trim();
   const venueName = String(formData.get("venueName") ?? "").trim();
+  const googlePlaceId = String(formData.get("googlePlaceId") ?? "").trim();
+  const formattedAddress = String(formData.get("formattedAddress") ?? "").trim();
+  const latitude = Number(formData.get("latitude"));
+  const longitude = Number(formData.get("longitude"));
   const city = String(formData.get("city") ?? "").trim();
+  const neighborhood = optionalFormString(formData, "neighborhood");
+  const countryCode = optionalFormString(formData, "countryCode");
   const dateWindow = String(formData.get("dateWindow") ?? "").trim();
   const description = String(formData.get("description") ?? "").trim();
   const fundingGoal = Math.round(Number(formData.get("fundingGoal") ?? 0) * 100);
   const deadlineValue = String(formData.get("deadline") ?? "");
 
-  if (!title || !artistName || !venueName || !city || !dateWindow || !description || !deadlineValue || !fundingGoal) {
+  if (
+    !title ||
+    !artistName ||
+    !venueName ||
+    !googlePlaceId ||
+    !formattedAddress ||
+    !Number.isFinite(latitude) ||
+    !Number.isFinite(longitude) ||
+    !city ||
+    !dateWindow ||
+    !description ||
+    !deadlineValue ||
+    !fundingGoal
+  ) {
     throw new Error("Missing required signal fields.");
   }
 
@@ -36,7 +61,13 @@ async function createCampaign(formData: FormData) {
       slug,
       artistName,
       venueName,
+      googlePlaceId,
+      formattedAddress,
+      latitude,
+      longitude,
       city,
+      neighborhood,
+      countryCode,
       dateWindow,
       description,
       fundingGoal,
@@ -67,14 +98,7 @@ export default function NewCampaignPage() {
           <span>Artist / DJ</span>
           <input name="artistName" placeholder="DJ Seinfeld" required />
         </label>
-        <label className="field">
-          <span>Possible room</span>
-          <input name="venueName" placeholder="Elsewhere Rooftop" required />
-        </label>
-        <label className="field">
-          <span>City</span>
-          <input name="city" placeholder="Brooklyn, NY" required />
-        </label>
+        <VenueAutocomplete />
         <label className="field">
           <span>Date window</span>
           <input name="dateWindow" placeholder="Late August 2026" required />

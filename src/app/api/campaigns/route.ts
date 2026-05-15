@@ -25,6 +25,19 @@ export async function POST(request: Request) {
     }
   }
 
+  const hasStructuredVenue = Boolean(body.googlePlaceId);
+
+  if (
+    hasStructuredVenue &&
+    (!body.formattedAddress ||
+      typeof body.latitude !== "number" ||
+      typeof body.longitude !== "number" ||
+      !Number.isFinite(body.latitude) ||
+      !Number.isFinite(body.longitude))
+  ) {
+    return NextResponse.json({ error: "Structured venue data is incomplete" }, { status: 400 });
+  }
+
   const creator = await prisma.user.upsert({
     where: { email: body.creatorEmail ?? "organizer@pull.local" },
     update: {},
@@ -40,7 +53,13 @@ export async function POST(request: Request) {
       slug: `${slugify(body.title)}-${Date.now().toString(36)}`,
       artistName: body.artistName,
       venueName: body.venueName,
+      googlePlaceId: body.googlePlaceId ?? null,
+      formattedAddress: body.formattedAddress ?? null,
+      latitude: hasStructuredVenue ? body.latitude : null,
+      longitude: hasStructuredVenue ? body.longitude : null,
       city: body.city,
+      neighborhood: body.neighborhood ?? null,
+      countryCode: body.countryCode ?? null,
       dateWindow: body.dateWindow,
       description: body.description,
       fundingGoal: Number(body.fundingGoal),

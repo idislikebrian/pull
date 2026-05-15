@@ -11,7 +11,8 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:studio": "prisma studio",
-    "seed": "tsx prisma/seed.ts"
+    "seed": "tsx prisma/seed.ts",
+    "backfill:venues": "tsx scripts/backfill-venues.ts"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",

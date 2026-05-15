@@ -42,26 +42,35 @@ model User {
 }
 
 model Campaign {
-  id          String         @id @default(cuid())
-  slug        String         @unique
-  title       String
-  artistName  String
-  venueName   String
-  city        String
-  dateWindow  String
-  description String
-  fundingGoal Int
-  deadline    DateTime
-  status      CampaignStatus @default(DRAFT)
-  imageUrl    String?
-  creatorId   String
-  creator     User           @relation(fields: [creatorId], references: [id], onDelete: Cascade)
-  pledges     Pledge[]
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
+  id               String         @id @default(cuid())
+  slug             String         @unique
+  title            String
+  artistName       String
+  venueName        String
+  googlePlaceId    String?
+  formattedAddress String?
+  latitude         Float?
+  longitude        Float?
+  city             String
+  neighborhood     String?
+  countryCode      String?
+  dateWindow       String
+  description      String
+  fundingGoal      Int
+  deadline         DateTime
+  status           CampaignStatus @default(DRAFT)
+  imageUrl         String?
+  creatorId        String
+  creator          User           @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  pledges          Pledge[]
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
 
   @@index([status, deadline])
   @@index([city])
+  @@index([googlePlaceId])
+  @@index([latitude, longitude])
+  @@index([countryCode, city])
 }
 
 model Pledge {

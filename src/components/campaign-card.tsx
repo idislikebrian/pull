@@ -29,8 +29,12 @@ export function CampaignCard({ campaign }: { campaign: CampaignWithPledges }) {
         <h3>{campaign.title}</h3>
         <dl className="classified-ledger">
           <div>
+            <dt>Venue</dt>
+            <dd>{campaign.venueName}</dd>
+          </div>
+          <div>
             <dt>City</dt>
-            <dd>{campaign.city}</dd>
+            <dd>{[campaign.neighborhood, campaign.city].filter(Boolean).join(" / ")}</dd>
           </div>
           <div>
             <dt>Window</dt>

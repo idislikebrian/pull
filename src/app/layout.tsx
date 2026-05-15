@@ -1,10 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
-import { Space_Grotesk } from "next/font/google";
-import { cn } from "@/lib/utils";
-
-const spaceGrotesk = Space_Grotesk({subsets:['latin'],variable:'--font-sans'});
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
@@ -18,7 +14,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={cn("font-sans", spaceGrotesk.variable)}>
+    <html lang="en">
       <body>
         <header className="site-header">
           <Link className="brand" href="/">
