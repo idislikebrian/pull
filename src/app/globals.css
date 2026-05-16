@@ -109,7 +109,14 @@ select {
   letter-spacing: 0;
 }
 
+.site-header nav {
+  align-items: center;
+  display: flex;
+  gap: var(--space-sm);
+}
+
 .site-header nav a,
+.nav-auth-button,
 .button {
   align-items: center;
   background: var(--text-display);
@@ -132,9 +139,30 @@ select {
 }
 
 .site-header nav a:hover,
+.nav-auth-button:hover,
 .button:hover {
   background: var(--accent);
   border-color: var(--accent);
+  color: var(--text-display);
+}
+
+.nav-auth-button {
+  cursor: pointer;
+}
+
+.nav-auth-button.secondary {
+  background: transparent;
+  border-color: var(--border-visible);
+  color: var(--text-primary);
+  max-width: 190px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nav-auth-button.secondary:hover {
+  background: transparent;
+  border-color: var(--text-display);
   color: var(--text-display);
 }
 

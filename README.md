@@ -19,6 +19,7 @@ Collective demand event platform. Fans signal “I would go to this” before an
 - Prisma
 - PostgreSQL
 - Stripe SDK, ready for authorization flow integration
+- Privy phone/email auth for participation actions
 - Plain CSS for the initial interface
 
 ## Local Setup
@@ -37,14 +38,23 @@ Collective demand event platform. Fans signal “I would go to this” before an
 
 3. Point `DATABASE_URL` at a local PostgreSQL or Neon database.
 
-4. Run the database migration and seed:
+4. Configure auth when testing participation flows:
+
+   ```bash
+   NEXT_PUBLIC_PRIVY_APP_ID="..."
+   PRIVY_APP_SECRET="..."
+   AUTH_ENABLED="true"
+   AUTH_REQUIRED_FOR_MUTATIONS="true"
+   ```
+
+5. Run the database migration and seed:
 
    ```bash
    npm run prisma:migrate -- --name init
    npm run seed
    ```
 
-5. Start the app:
+6. Start the app:
 
    ```bash
    npm run dev
@@ -52,7 +62,5 @@ Collective demand event platform. Fans signal “I would go to this” before an
 
 ## Next Decisions
 
-- Choose auth: Privy or magic-link email.
-- Replace placeholder local users in API routes with the authenticated user.
 - Implement Stripe PaymentIntent setup for hard pledge authorization without capture.
 - Add campaign moderation controls for `GREENLIT`, `EXPIRED`, and `CANCELLED`.

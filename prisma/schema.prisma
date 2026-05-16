@@ -30,15 +30,56 @@ enum PaymentStatus {
   CANCELLED
 }
 
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+}
+
+enum OnboardingStatus {
+  HANDLE_ASSIGNED
+  COMPLETE
+}
+
+enum IdentityProvider {
+  PRIVY_PHONE
+  PRIVY_EMAIL
+  PRIVY_WALLET
+  PRIVY_PASSKEY
+  PRIVY_SOCIAL
+}
+
 model User {
-  id        String     @id @default(cuid())
-  username  String     @unique
-  email     String     @unique
-  avatarUrl String?
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  campaigns Campaign[]
-  pledges   Pledge[]
+  id                  String             @id @default(cuid())
+  privyUserId         String?            @unique
+  handle              String             @unique
+  email               String?            @unique
+  avatarUrl           String?
+  onboardingStatus    OnboardingStatus   @default(HANDLE_ASSIGNED)
+  status              UserStatus         @default(ACTIVE)
+  isLegacyPlaceholder Boolean            @default(false)
+  handleCustomizedAt  DateTime?
+  lastLoginAt         DateTime?
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+  identityAccounts    IdentityAccount[]
+  campaigns           Campaign[]
+  pledges             Pledge[]
+}
+
+model IdentityAccount {
+  id                String           @id @default(cuid())
+  userId            String
+  provider          IdentityProvider
+  providerAccountId String
+  normalizedValue   String?
+  displayValue      String?
+  verifiedAt        DateTime?
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  user              User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
 }
 
 model Campaign {
@@ -85,6 +126,7 @@ model Pledge {
   user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   campaign        Campaign      @relation(fields: [campaignId], references: [id], onDelete: Cascade)
 
+  @@unique([userId, campaignId])
   @@index([campaignId, type])
   @@index([userId])
 }

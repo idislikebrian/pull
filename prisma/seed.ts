@@ -342,7 +342,7 @@ async function main() {
     update: {},
     create: {
       email: "maya@pull.local",
-      username: "maya",
+      handle: "maya",
       avatarUrl: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=300&q=80"
     }
   });
@@ -358,7 +358,8 @@ async function main() {
 
       return {
         email: `fan${number}@pull.local`,
-        username: `fan${number}`
+        handle: `fan${number}`,
+        isLegacyPlaceholder: true
       };
     });
 
@@ -374,7 +375,7 @@ async function main() {
       }
     },
     orderBy: {
-      username: "asc"
+      handle: "asc"
     }
   });
 

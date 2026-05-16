@@ -1,38 +1,88 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { usePrivy } from "@privy-io/react-auth";
+import { useEffect, useState, useTransition } from "react";
 
 type PledgeChoice = "SOFT" | "1000" | "2000" | "5000";
 
 export function PledgeForm({ campaignId }: { campaignId: string }) {
+  if (!process.env.NEXT_PUBLIC_PRIVY_APP_ID) {
+    return <PledgeFormUnavailable />;
+  }
+
+  return <AuthenticatedPledgeForm campaignId={campaignId} />;
+}
+
+function PledgeFormUnavailable() {
+  return (
+    <div className="pledge-panel">
+      <p className="instrument-label">Demand console</p>
+      <h2>Help make this real</h2>
+      <p className="meta">
+        Signals require authentication. Add Privy environment variables to enable phone or email verification.
+      </p>
+      <button className="button" disabled type="button">
+        Verification offline
+      </button>
+      <p className="trust-note">Browsing stays open. Participation needs a durable pseudonymous identity.</p>
+    </div>
+  );
+}
+
+function AuthenticatedPledgeForm({ campaignId }: { campaignId: string }) {
+  const { authenticated, getAccessToken, login, ready } = usePrivy();
   const [choice, setChoice] = useState<PledgeChoice>("SOFT");
   const [message, setMessage] = useState("");
+  const [pendingChoice, setPendingChoice] = useState<PledgeChoice | null>(null);
   const [isPending, startTransition] = useTransition();
 
-  function submitPledge() {
+  function submitPledge(selectedChoice = choice) {
     setMessage("");
 
     startTransition(async () => {
+      const accessToken = await getAccessToken();
+
+      if (!accessToken) {
+        setPendingChoice(selectedChoice);
+        setMessage("Verify once so the signal counts. Use phone or email; signals stay pseudonymous by default.");
+        login({ loginMethods: ["sms", "email"] });
+        return;
+      }
+
       const response = await fetch("/api/pledges", {
         method: "POST",
         headers: {
+          Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
           campaignId,
-          type: choice === "SOFT" ? "SOFT" : "HARD",
-          amount: choice === "SOFT" ? 0 : Number(choice)
+          type: selectedChoice === "SOFT" ? "SOFT" : "HARD",
+          amount: selectedChoice === "SOFT" ? 0 : Number(selectedChoice)
         })
       });
 
       if (!response.ok) {
-        setMessage("Something slipped. Try again in a moment.");
+        const result = (await response.json().catch(() => null)) as { error?: string } | null;
+        setMessage(result?.error ?? "Something slipped. Try again in a moment.");
         return;
       }
 
-      setMessage(choice === "SOFT" ? "Signal received. You are counted in." : "Commitment received. Momentum updated.");
+      setMessage(
+        selectedChoice === "SOFT" ? "Signal received. You are counted in." : "Commitment received. Momentum updated."
+      );
     });
   }
+
+  useEffect(() => {
+    if (!ready || !authenticated || !pendingChoice) {
+      return;
+    }
+
+    const selectedChoice = pendingChoice;
+    setPendingChoice(null);
+    submitPledge(selectedChoice);
+  }, [authenticated, pendingChoice, ready]);
 
   return (
     <div className="pledge-panel">
@@ -59,7 +109,7 @@ export function PledgeForm({ campaignId }: { campaignId: string }) {
           <span>$50</span>
         </label>
       </div>
-      <button className="button" disabled={isPending} onClick={submitPledge} type="button">
+      <button className="button" disabled={isPending} onClick={() => submitPledge()} type="button">
         {isPending ? "Sending signal" : "Signal demand"}
       </button>
       <p className="trust-note">No ticket exists yet. This is demand becoming legible.</p>
